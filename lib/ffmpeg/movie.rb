@@ -9,7 +9,7 @@ module FFMPEG
     attr_reader :path, :duration, :time, :bitrate, :rotation, :creation_time
     attr_reader :video_stream, :video_codec, :video_bitrate, :colorspace, :width, :height, :sar, :dar, :level, :profile, :frame_rate
     attr_reader :audio_streams, :audio_stream, :audio_codec, :audio_bitrate, :audio_sample_rate, :audio_channels, :audio_tags
-    attr_reader :max_volume, :mean_volume, :lkfs, :loudness_lra, :loudness_true_peak, :loudness_threshold, :target_offset, :normalize_command
+    attr_reader :max_volume, :mean_volume, :lkfs, :loudness_lra, :loudness_true_peak, :loudness_threshold, :target_offset, :normalize_command, :loudness_error
     attr_reader :container
     attr_reader :metadata, :format_tags
 
@@ -166,7 +166,8 @@ module FFMPEG
           ":measured_LRA=#{@loudness_lra}:measured_TP=#{@loudness_true_peak}:measured_thresh"\
           "=#{@loudness_threshold}:offset=#{@target_offset}:linear=true:print_format=summary"
       else
-        raise "Could not retrieve lkfs"
+        @invalid = true
+        @loudness_error = 'Could not parse lkfs'
       end
       std_err.flush
     end
