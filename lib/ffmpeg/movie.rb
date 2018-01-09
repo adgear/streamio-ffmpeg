@@ -153,22 +153,23 @@ module FFMPEG
       lkfs_command = [FFMPEG.ffmpeg_binary, '-i', path, '-af', *%w(loudnorm=I=-24:TP=-1.5:LRA=11:print_format=json -f null -)]
       _stdin, _stdout, std_err, wait_thr = Open3.popen3(*lkfs_command)
 
-      if wait_thr.value.success?
-        stats = JSON.parse(std_err.read.lines[-12, 12].join)
-        @lkfs = stats['input_i']
-        @loudness_lra = stats['input_lra']
-        @loudness_threshold = stats['input_thresh']
-        @loudness_true_peak = stats['input_tp']
-        @target_offset = stats['target_offset']
+      raise 'Could not parse lkfs' unless wait_thr.value.success?
 
-        # This attribute can be used as the input to 'loudness_normalization' when doing two-pass transcoding
-        @normalize_command = "loudnorm=I=-24:TP=-1.5:LRA=11:measured_I=#{@lkfs}"\
-          ":measured_LRA=#{@loudness_lra}:measured_TP=#{@loudness_true_peak}:measured_thresh"\
-          "=#{@loudness_threshold}:offset=#{@target_offset}:linear=true:print_format=summary"
-      else
-        @invalid = true
-        @loudness_error = 'Could not parse lkfs'
-      end
+      stats = JSON.parse(std_err.read.lines[-12, 12].join)
+      @lkfs = stats['input_i']
+      @loudness_lra = stats['input_lra']
+      @loudness_threshold = stats['input_thresh']
+      @loudness_true_peak = stats['input_tp']
+      @target_offset = stats['target_offset']
+
+      # This attribute can be used as the input to 'loudness_normalization' when doing two-pass transcoding
+      @normalize_command = "loudnorm=I=-24:TP=-1.5:LRA=11:measured_I=#{@lkfs}"\
+        ":measured_LRA=#{@loudness_lra}:measured_TP=#{@loudness_true_peak}:measured_thresh"\
+        "=#{@loudness_threshold}:offset=#{@target_offset}:linear=true:print_format=summary"
+    rescue
+      @invalid = true
+      @loudness_error = 'Could not parse lkfs'
+    ensure
       std_err.flush
     end
 
