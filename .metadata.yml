@@ -2,6 +2,7 @@ metadata:
   name: adgear/streamio-ffmpeg
   description: Simple yet powerful ruby ffmpeg wrapper for reading metadata and transcoding movies
   labels:
+    stack: Ruby
     jira-project: SDSP
     jira-board: 182
     public: false
