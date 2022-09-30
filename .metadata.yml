@@ -11,6 +11,6 @@ metadata:
   - url: https://adgear.atlassian.net/l/cp/9kD8ZGRe
     title: SDSP-API Confluence Page
 spec:
-  owner: cg-maintainers-dsp-api
+  owner: cg-dsp-api
   type: tool
   lifecycle: production
