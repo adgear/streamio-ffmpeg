@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.homepage    = "http://github.com/streamio/streamio-ffmpeg"
   s.summary     = "Wraps ffmpeg to read metadata and transcodes videos."
 
-  s.add_dependency('multi_json', '~> 1.8')
+  s.add_dependency('multi_json', '~> 1.15')
 
   s.add_development_dependency("rspec", "~> 3")
   s.add_development_dependency("rake", "~> 10.1")
