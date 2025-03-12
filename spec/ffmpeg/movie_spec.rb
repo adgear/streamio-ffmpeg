@@ -576,11 +576,11 @@ module FFMPEG
 
         transcoder_double = double(Transcoder)
         expect(Transcoder).to receive(:new).
-            with(movie, "#{tmp_path}/hello.mp3", {audio_codec: 'libmp3lame', custom: %w(-qscale:a 2)}, {}).
+            with(movie, "#{tmp_path}/hello.mp3", {audio_codec: 'libmp3lame', custom: %w(-qscale:a 2)}, **{}).
             and_return(transcoder_double)
         expect(transcoder_double).to receive(:run)
 
-        movie.transcode("#{tmp_path}/hello.mp3", {audio_codec: 'libmp3lame', custom: %w(-qscale:a 2)}, {})
+        movie.transcode("#{tmp_path}/hello.mp3", {audio_codec: 'libmp3lame', custom: %w(-qscale:a 2)}, **{})
       end
     end
 
